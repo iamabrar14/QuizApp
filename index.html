@@ -2,106 +2,166 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Quiz Game</title>
+  <title>Football Quiz Game</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #d3cce3, #e9e4f0);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       margin: 0;
+      padding: 0;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/f/fd/Qatar_2022_World_Cup_football_on_grass.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    header {
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #facc15;
+      border-bottom: 3px solid #facc15;
+      text-shadow: 2px 2px #000;
     }
 
     .quiz-box {
-      background: #fff;
+      background: url('https://cdn.pixabay.com/photo/2016/06/18/17/42/grass-1460784_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      border: 4px solid #ffffff;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+      max-width: 700px;
       width: 90%;
+      margin: 40px auto;
       text-align: center;
     }
 
     h2 {
-      color: #333;
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #111;
+      margin-bottom: 25px;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
     .option {
       margin: 10px 0;
-      padding: 12px 20px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      background-color: #f9f9f9;
+      padding: 14px 20px;
+      border: 2px solid #fff;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.85);
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
       text-align: left;
+      font-weight: bold;
+      color: #111;
     }
 
     .option:hover {
-      background-color: #dbeafe;
-      border-color: #60a5fa;
+      background-color: #34d399;
+      color: #000;
+      border-color: #22c55e;
     }
 
     #result {
       margin-top: 20px;
-      font-size: 18px;
+      font-size: 22px;
       font-weight: bold;
+      text-shadow: 1px 1px 2px black;
+    }
+
+    #timer {
+      font-size: 20px;
+      color: #f87171;
+      margin-top: 10px;
     }
 
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #4f46e5;
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #3b82f6;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 17px;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #4338ca;
+      background-color: #1e3a8a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 14px;
+      margin-top: auto;
     }
   </style>
 </head>
 <body>
+  <header>⚽ Pick the Ball — Pass the Ball ⚽</header>
+
   <div class="quiz-box">
     <h2 id="question">Loading...</h2>
     <div id="options"></div>
+    <div id="timer"></div>
     <div id="result"></div>
     <button onclick="nextQuestion()">Next</button>
   </div>
 
+  <footer>
+    @Created by Abrar Rahman
+  </footer>
+
+  <!-- Sounds -->
+  <audio id="correct-sound" src="https://cdn.pixabay.com/audio/2022/10/31/audio_9eb99b5e13.mp3" preload="auto"></audio>
+  <audio id="wrong-sound" src="https://cdn.pixabay.com/audio/2022/03/26/audio_63bfb0cfce.mp3" preload="auto"></audio>
+
   <script>
     const questions = [
-      ["Who is the inventor of Facebook?", "Mark Zuckerberg", "Bill Gates", "Steve Jobs", "Elon Musk", 1],
-      ["Which one is an OOP language?", "HTML", "CSS", "Python", "C", 3],
-      ["Who won 2022 FIFA World Cup?", "Portugal", "Argentina", "France", "Germany", 2],
-      ["Who is the inventor of Windows?", "Shakib Al Hasan", "Bill Gates", "Mustafa Zabbar", "Elon Musk", 2],
-      ["Which animal is a pet animal?", "Tiger", "Lion", "Whale", "Cat", 4],
-      ["Who won a noble prize from that following list", "Dr. Muhammad Younus", "Donald Trump", "Narendra Modi", "Benjamin Netaniahu", 1],
-      ["Which language is used for developing Facebook?", "Bengali", "English", "PHP", "Assembly", 3],
-      ["Who is a boxer among them", "Mohammad Ali", "Lionel Messi", "Undertaker", "Steve Smith", 1],
-      ["Which Country is an Asian Country", "Russia", "Ukraine", "Mali", "Taiwan", 4],
-      ["Who is a movie director among them", "Christopher Nolan", "Steve Jobs", "Tarek Zia", "Andre Onana", 1]
+      ["Who won 1998 world cup?", "France", "Brazil", "Argentina", "Spain", 1],
+      ["Football club Barcelona established -", "1905", "1900", "1899", "1934", 3],
+      ["Who won 2022 FIFA WC Golden Boot", "Messi", "Mbappe", "Haaland", "Lewandowski", 2],
+      ["Which player won Ballon D'or among them", "Salah", "Luis Suarez Senior", "Neymar", "Cafu", 2],
+      ["Which player is known as Del Kaiser", "Rumminigge", "Messi", "Muller", "Beckenbauer", 4],
+      ["Which team is currently no 1 ranked team?", "Argentina", "Spain", "Germany", "Brazil", 1],
+      ["In which club Hamza Chowdhury Played?", "Brighton", "Brentford", "Leicester", "Birmingham", 3],
+      ["La Pulga is nickname of- ", "Messi", "Ronaldo", "Neymar", "Suarez", 1],
+      ["Which team share venue with AC Milan", "Napoli", "Bologna", "Juventus", "Inter", 4],
+      ["Who is known for godfather of modern football", "Johan Cruyff", "Pep Guardiola", "Jose Mourinho", "Hansi Flick", 1]
     ];
 
     const levels = [1000, 2000, 3000, 5000, 10000, 20000, 40000, 80000, 160000, 320000];
     let current = 0;
     let money = 0;
+    let timer;
+    let timeLeft = 30;
 
     function showQuestion() {
       if (current >= questions.length) {
-        document.getElementById('question').innerText = `Game Over! You won TK ${money}`;
+        document.getElementById('question').innerText = `🏆 Game Over! You won TK ${money}`;
         document.getElementById('options').innerHTML = "";
         document.querySelector("button").style.display = "none";
+        document.getElementById("timer").style.display = "none";
         return;
       }
 
       let q = questions[current];
       document.getElementById("question").innerText = `Q${current + 1} for TK ${levels[current]}:\n${q[0]}`;
+      document.getElementById("result").innerText = "";
+      document.getElementById("timer").style.display = "block";
 
       const optionsDiv = document.getElementById("options");
       optionsDiv.innerHTML = "";
@@ -114,22 +174,54 @@
         optionsDiv.appendChild(btn);
       }
 
-      document.getElementById("result").innerText = "";
+      // Reset and start timer
+      timeLeft = 30;
+      updateTimerDisplay();
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timeUp();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById("timer").innerText = `⏳ Time Left: ${timeLeft} seconds`;
     }
 
     function checkAnswer(selected) {
+      clearInterval(timer);
       const correct = questions[current][5];
       const result = document.getElementById("result");
+      const correctSound = document.getElementById("correct-sound");
+      const wrongSound = document.getElementById("wrong-sound");
 
       if (selected === correct) {
         result.innerText = "✅ Correct!";
+        correctSound.play();
         money = levels[current];
       } else {
         result.innerText = "❌ Wrong Answer! Game Over!";
+        wrongSound.play();
         document.getElementById("options").innerHTML = "";
         document.querySelector("button").style.display = "none";
         document.getElementById("question").innerText = `You won TK ${money}`;
+        document.getElementById("timer").style.display = "none";
       }
+    }
+
+    function timeUp() {
+      const result = document.getElementById("result");
+      const wrongSound = document.getElementById("wrong-sound");
+      result.innerText = "⏰ Time's up! Game Over!";
+      wrongSound.play();
+      document.getElementById("options").innerHTML = "";
+      document.querySelector("button").style.display = "none";
+      document.getElementById("question").innerText = `You won TK ${money}`;
+      document.getElementById("timer").style.display = "none";
     }
 
     function nextQuestion() {

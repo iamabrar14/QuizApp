@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #d3cce3, #e9e4f0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .quiz-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    .option {
+      margin: 10px 0;
+      padding: 12px 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+    }
+
+    .option:hover {
+      background-color: #dbeafe;
+      border-color: #60a5fa;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h2 id="question">Loading...</h2>
+    <div id="options"></div>
+    <div id="result"></div>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script>
+    const questions = [
+      ["Who is the inventor of Facebook?", "Mark Zuckerberg", "Bill Gates", "Steve Jobs", "Elon Musk", 1],
+      ["Which one is an OOP language?", "HTML", "CSS", "Python", "C", 3],
+      ["Who won 2022 FIFA World Cup?", "Portugal", "Argentina", "France", "Germany", 2],
+      ["Who is the inventor of Windows?", "Shakib Al Hasan", "Bill Gates", "Mustafa Zabbar", "Elon Musk", 2],
+      ["Which animal is a pet animal?", "Tiger", "Lion", "Whale", "Cat", 4],
+      ["Who won a noble prize from that following list", "Dr. Muhammad Younus", "Donald Trump", "Narendra Modi", "Benjamin Netaniahu", 1],
+      ["Which language is used for developing Facebook?", "Bengali", "English", "PHP", "Assembly", 3],
+      ["Who is a boxer among them", "Mohammad Ali", "Lionel Messi", "Undertaker", "Steve Smith", 1],
+      ["Which Country is an Asian Country", "Russia", "Ukraine", "Mali", "Taiwan", 4],
+      ["Who is a movie director among them", "Christopher Nolan", "Steve Jobs", "Tarek Zia", "Andre Onana", 1]
+    ];
+
+    const levels = [1000, 2000, 3000, 5000, 10000, 20000, 40000, 80000, 160000, 320000];
+    let current = 0;
+    let money = 0;
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        document.getElementById('question').innerText = `Game Over! You won TK ${money}`;
+        document.getElementById('options').innerHTML = "";
+        document.querySelector("button").style.display = "none";
+        return;
+      }
+
+      let q = questions[current];
+      document.getElementById("question").innerText = `Q${current + 1} for TK ${levels[current]}:\n${q[0]}`;
+
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.createElement("div");
+        btn.className = "option";
+        btn.innerText = `${String.fromCharCode(96 + i)}. ${q[i]}`;
+        btn.onclick = () => checkAnswer(i);
+        optionsDiv.appendChild(btn);
+      }
+
+      document.getElementById("result").innerText = "";
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[current][5];
+      const result = document.getElementById("result");
+
+      if (selected === correct) {
+        result.innerText = "✅ Correct!";
+        money = levels[current];
+      } else {
+        result.innerText = "❌ Wrong Answer! Game Over!";
+        document.getElementById("options").innerHTML = "";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("question").innerText = `You won TK ${money}`;
+      }
+    }
+
+    function nextQuestion() {
+      current++;
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
